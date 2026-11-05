@@ -1,0 +1,52 @@
+<%
+  var hasImg = listing.image && listing.image.url && listing.image.filename;
+%>
+<div class="mb-3">
+  <label class="form-label" for="title">Title</label>
+  <input class="form-control" id="title" name="listing[title]" value="<%= listing.title %>" minlength="3" maxlength="100" placeholder="Cozy cabin near the lake" required />
+  <div class="invalid-feedback">Enter a title of 3 to 100 characters.</div>
+</div>
+
+<div class="mb-3">
+  <label class="form-label" for="description">Description</label>
+  <textarea class="form-control" id="description" name="listing[description]" rows="4" minlength="10" maxlength="1000" placeholder="What makes this stay special?" required><%= listing.description %></textarea>
+  <div class="invalid-feedback">Write at least 10 characters.</div>
+</div>
+
+<div class="mb-3">
+  <label class="form-label" for="image">Photo <span class="text-muted fw-normal">(max 5 MB<%= hasImg ? ", leave empty to keep the current one" : ", optional" %>)</span></label>
+  <input type="file" class="form-control" id="image" name="listing[image]" accept="image/png,image/jpeg,image/webp" data-preview="preview" />
+  <div class="invalid-feedback">The image must be smaller than 5 MB.</div>
+  <img id="preview" class="upload-preview mt-2 <%= hasImg ? '' : 'd-none' %>" src="<%= hasImg ? listing.image.url : '' %>" alt="Photo preview" />
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-3">
+    <label class="form-label" for="price">Price per night (&#8377;)</label>
+    <input type="number" min="0" class="form-control" id="price" name="listing[price]" value="<%= listing.price %>" required />
+    <div class="invalid-feedback">Enter a price of 0 or more.</div>
+  </div>
+  <div class="col-md-8 mb-3">
+    <label class="form-label" for="category">Category</label>
+    <select class="form-select" id="category" name="listing[category]" required>
+      <option value="" disabled <%= listing.category ? "" : "selected" %>>Choose a category</option>
+      <% categories.forEach(function(c){ %>
+        <option value="<%= c.name %>" <%= listing.category === c.name ? "selected" : "" %>><%= c.name %></option>
+      <% }) %>
+    </select>
+    <div class="invalid-feedback">Choose a category.</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 mb-3">
+    <label class="form-label" for="location">City or area</label>
+    <input class="form-control" id="location" name="listing[location]" value="<%= listing.location %>" required />
+    <div class="invalid-feedback">Enter the city or area.</div>
+  </div>
+  <div class="col-md-6 mb-3">
+    <label class="form-label" for="country">Country</label>
+    <input class="form-control" id="country" name="listing[country]" value="<%= listing.country %>" required />
+    <div class="invalid-feedback">Enter the country.</div>
+  </div>
+</div>

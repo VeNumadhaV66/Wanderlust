@@ -1,19 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WanderLust</title>
-  </head>
-  <body>
-    <h3>All Listings</h3>
-    <form method="GET" action="/listings/new">
-      <button>Create New Listing</button>
-    </form>
-    <ul>
-      <% for(let listing of allListings) { %>
-      <li><a href="/listings/<%= listing._id %>"> <%= listing.title %> </a></li>
-      <% } %>
-    </ul>
-  </body>
-</html>
+<% layout("layouts/boilerplate") %>
+
+<% if (!q && !category) { %>
+  <!-- Intro banner: delete this whole block if you prefer the plain list -->
+  <section class="home-hero">
+    <div class="home-hero-inner">
+      <h1>Find a stay worth the trip</h1>
+      <p>Cabins, beach villas, city lofts and castles from hosts around the world.</p>
+      <div class="home-hero-chips">
+        <a href="/listings?q=Bali">Bali</a>
+        <a href="/listings?q=Aspen">Aspen</a>
+        <a href="/listings?q=Tuscany">Tuscany</a>
+        <a href="/listings?q=Maldives">Maldives</a>
+        <a href="/listings?q=Tokyo">Tokyo</a>
+      </div>
+    </div>
+  </section>
+<% } %>
+
+<div class="filters-bar">
+  <div class="category-row">
+    <a href="/listings" class="category <%= !category ? 'active' : '' %>">
+      <i class="fa-solid fa-border-all"></i><span>All</span>
+    </a>
+    <% categories.forEach(function(c){ %>
+      <a href="/listings?category=<%= encodeURIComponent(c.name) %>" class="category <%= category === c.name ? 'active' : '' %>">
+        <i class="fa-solid <%= c.icon %>"></i><span><%= c.name %></span>
+      </a>
+    <% }) %>
+  </div>
+
+  <label class="tax-toggle form-check form-switch" for="taxSwitch">
+    <input class="form-check-input" type="checkbox" role="switch" id="taxSwitch" />
+    <span>Display total after taxes</span>
+  </label>
+</div>
+
+<% if (q || category) { %>
+  <p class="results-note">
+    <%= allListings.length %> stay<%= allListings.length === 1 ? "" : "s" %>
+    <% if (q) { %>for "<%= q %>"<% } %>
+    <% if (category) { %>in <%= category %><% } %>
+    &middot; <a href="/listings">Clear filters</a>
+  </p>
+<% } %>
+
+<% if (allListings.length === 0) { %>
+  <div class="text-center py-5">
+    <i class="fa-regular fa-compass empty-icon"></i>
+    <h2 class="h4 mt-3">No stays found</h2>
+    <p class="text-muted">Try another place or category.</p>
+    <a href="/listings" class="btn btn-brand">See all stays</a>
+  </div>
+<% } else { %>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4 mb-5">
+    <% allListings.forEach(function(l){ %>
+      <div class="col">
+        <a href="/listings/<%= l._id %>" class="listing-link">
+          <div class="card listing-card h-100 border-0">
+            <img src="<%= l.image.url %>" class="card-img-top listing-img" alt="<%= l.title %>" loading="lazy" />
+            <div class="card-body px-0 pb-0">
+              <b><%= l.title %></b>
+              <div class="text-muted small"><%= l.location %>, <%= l.country %></div>
+              <p class="listing-price mt-1" data-price="<%= l.price %>">
+                <b class="price-value">&#8377; <%= l.price.toLocaleString("en-IN") %></b>
+                <span class="price-note">/ night</span>
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    <% }) %>
+  </div>
+<% } %>

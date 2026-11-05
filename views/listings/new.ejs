@@ -1,37 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WanderLust</title>
-  </head>
-  <body>
-    <h3>Create a New Listing</h3>
-    <form method="POST" action="/listings">
-      <input name="listing[title]" placeholder="enter title" type="text" />
-      <br /><br />
-      <textarea
-        name="listing[description]"
-        placeholder="enter description"
-      ></textarea>
-      <br /><br />
-      <input
-        name="listing[image]"
-        placeholder="enter image URL/Link"
-        type="text"
-      />
-      <br /><br />
-      <input name="listing[price]" placeholder="enter price" type="number" />
-      <br /><br />
-      <input name="listing[country]" placeholder="enter country" type="text" />
-      <br /><br />
-      <input
-        name="listing[location]"
-        placeholder="enter location"
-        type="text"
-      />
-      <br /><br />
-      <button>Add</button>
+<% layout("layouts/boilerplate") %>
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <h1 class="h3">Add your home</h1>
+    <p class="text-muted mb-4">Add a few details and your stay shows up on the homepage right away.</p>
+    <form method="POST" action="/listings" enctype="multipart/form-data" class="needs-validation mb-5" novalidate>
+      <%- include("_form.ejs", { listing: { title: "", description: "", price: "", location: "", country: "", category: "", image: null } }) %>
+      <button class="btn btn-brand" type="submit">Publish listing</button>
     </form>
-  </body>
-</html>
+  </div>
+</div>
